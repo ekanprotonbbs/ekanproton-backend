@@ -7,14 +7,16 @@ import {
     Param,
     Delete,
     Req,
+    UseGuards,
 } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserRequestDto } from "./dto/create-user.dto";
 import { UpdateUserRequestDto } from "./dto/update-user.dto";
 import { ApiOkResponse } from "@nestjs/swagger";
-import { UserResponseDto } from "./dto/response-user.dto";
+import { UserResponseDto } from "@common/dto/response-user.dto";
 import { LoginUserRequestDto } from "./dto/login-user.dto";
 import { Request } from "express";
+import { AuthGuard } from "@nestjs/passport";
 
 
 @Controller("api/user")
@@ -28,6 +30,7 @@ export class UserController {
     }
 
     @ApiOkResponse({ type: [UserResponseDto] })
+    //@UseGuards(AuthGuard("local"))
     @Get("all")
     async findAll() {
         return this.userService.findAll();
@@ -51,8 +54,5 @@ export class UserController {
         return this.userService.remove(id);
     }
 
-    @Post("login")
-    async login(@Body() loginUserRequestDto: LoginUserRequestDto, @Req() request: Request) {
-        return this.userService.login(loginUserRequestDto, request)
-    }
+
 }
