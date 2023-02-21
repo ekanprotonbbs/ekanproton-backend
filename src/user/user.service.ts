@@ -1,26 +1,56 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { Injectable } from "@nestjs/common";
+import { PrismaService } from "src/prisma/prisma.service";
+import { CreateUserRequestDto } from "./dto/create-user.dto";
+import { UpdateUserRequestDto } from "./dto/update-user.dto";
+import { DeleteUserRequestDto } from "./dto/delete-user.dto";
+import { hash, verify } from "argon2";
+import { UserResponseDto } from "./dto/response-user.dto";
+import { LoginUserRequestDto } from "./dto/login-user.dto";
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
-  }
+    constructor(private prisma: PrismaService) {}
 
-  findAll() {
-    return `This action returns all user`;
-  }
+    async create(
+        createUserRequestDto: CreateUserRequestDto
+    ): Promise<UserResponseDto> {
+        const { username, password } = createUserRequestDto;
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
+        const { password: _, ...result } = await this.prisma.user.create({
+            data: {
+                username: username,
+                password: await hash(password),
+            },
+        });
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
+        return result;
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
-  }
+    async findAll(): Promise<UserResponseDto[]> {
+        const resultarray = (await this.prisma.user.findMany({})).map((one) => {
+            const { password: _, ...result } = one;
+            return result;
+        });
+        return resultarray;
+    }
+
+    async findOne(id: number): Promise<UserResponseDto> {
+        const { password: _, ...result } =
+            await this.prisma.user.findUniqueOrThrow({
+                where: {
+                    id: id,
+                },
+            });
+
+        return result;
+    }
+
+    async update(id: number, updateUserRequestDto: UpdateUserRequestDto) {
+        return `This action updates a #${id} user`;
+    }
+
+    async remove(id: number) {
+        return `This action removes a #${id} user`;
+    }
+
 }

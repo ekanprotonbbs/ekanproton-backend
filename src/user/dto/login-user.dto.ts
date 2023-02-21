@@ -8,18 +8,14 @@ import {
     IsStrongPassword,
 } from "class-validator";
 
-export class CreateUserRequestDto {
-    @IsAlphanumeric()
+export class LoginUserRequestDto {
     @IsNotEmpty()
     @IsString()
-    @MinLength(3)
-    @MaxLength(20)
     @ApiProperty({ required: true })
     username: string;
 
     @IsNotEmpty()
     @IsString()
-    @IsStrongPassword()
     @ApiProperty({ required: true })
     password: string;
 }

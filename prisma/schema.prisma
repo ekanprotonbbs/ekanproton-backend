@@ -15,6 +15,7 @@ model User {
   username  String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  password  String
   posts     Post[]
 }
 

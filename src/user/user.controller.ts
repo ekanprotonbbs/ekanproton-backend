@@ -1,34 +1,50 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import {
+    Controller,
+    Get,
+    Post,
+    Body,
+    Patch,
+    Param,
+    Delete,
+} from "@nestjs/common";
+import { UserService } from "./user.service";
+import { CreateUserRequestDto } from "./dto/create-user.dto";
+import { UpdateUserRequestDto } from "./dto/update-user.dto";
+import { DeleteUserRequestDto } from "./dto/delete-user.dto";
+import { ApiOkResponse } from "@nestjs/swagger";
+import { UserResponseDto } from "./dto/response-user.dto";
 
-@Controller('user')
+@Controller("api/user")
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+    constructor(private readonly userService: UserService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
-  }
+    @ApiOkResponse({ type: UserResponseDto })
+    @Post("signup")
+    async create(@Body() createUserRequestDto: CreateUserRequestDto) {
+        return this.userService.create(createUserRequestDto);
+    }
 
-  @Get()
-  findAll() {
-    return this.userService.findAll();
-  }
+    @ApiOkResponse({ type: [UserResponseDto] })
+    @Get("all")
+    async findAll() {
+        return this.userService.findAll();
+    }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
-  }
+    @Get(":id")
+    async findOne(@Param("id") id: number) {
+        return this.userService.findOne(id);
+    }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
-  }
+    @Patch(":id")
+    async update(
+        @Param("id") id: number,
+        @Body() updateUserRequestDto: UpdateUserRequestDto
+    ) {
+        return this.userService.update(id, updateUserRequestDto);
+    }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
-  }
+    @Delete(":id")
+    async remove(@Param("id") id: number) {
+        return this.userService.remove(id);
+    }
 }
