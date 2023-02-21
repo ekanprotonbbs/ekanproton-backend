@@ -26,6 +26,7 @@
     "@nestjs/passport": "^9.0.3",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/swagger": "^6.2.1",
+    "@prisma/client": "^4.10.1",
     "@types/connect-redis": "^0.0.20",
     "@types/express-session": "^1.17.6",
     "@types/ioredis": "^5.0.0",
