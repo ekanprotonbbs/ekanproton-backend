@@ -17,6 +17,7 @@ import { UserResponseDto } from "@common/dto/response-user.dto";
 import { LoginUserRequestDto } from "./dto/login-user.dto";
 import { Request } from "express";
 import { AuthGuard } from "@nestjs/passport";
+import { SessionGuard } from "src/auth/auth.guard";
 
 
 @Controller("api/user")
@@ -30,7 +31,7 @@ export class UserController {
     }
 
     @ApiOkResponse({ type: [UserResponseDto] })
-    //@UseGuards(AuthGuard("local"))
+    @UseGuards(SessionGuard)
     @Get("all")
     async findAll() {
         return this.userService.findAll();
