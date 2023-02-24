@@ -7,6 +7,7 @@ import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import * as session from "express-session";
 import * as connectRedis from "connect-redis";
 import Redis from "ioredis";
+import * as passport from "passport";
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
@@ -33,6 +34,7 @@ async function bootstrap() {
 
     app.use(
         session({
+            name: "SESSIONID",
             secret: process.env.SESSION_SECRET,
             resave: false,
             saveUninitialized: false,
@@ -46,7 +48,11 @@ async function bootstrap() {
                 client: redis,
             }),
         })
+
+        
     );
+    app.use(passport.initialize())
+    app.use(passport.session())
 
     await app.listen(3001);
 
