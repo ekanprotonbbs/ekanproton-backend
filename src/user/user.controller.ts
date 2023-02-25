@@ -28,27 +28,14 @@ export class UserController {
     }
 
     @ApiOkResponse({ type: [UserResponseDto] })
-    @Get("all")
+    @Get("profile/all")
     async findAll() {
         return this.userService.findAll();
     }
 
-    @Get(":id")
-    async findOne(@Param("id", ParseIntPipe) id: number) {
-        return this.userService.findOne(id);
-    }
-
-    @Patch(":id")
-    async update(
-        @Param("id") id: number,
-        @Body() updateUserRequestDto: UpdateUserRequestDto
-    ) {
-        return this.userService.update(id, updateUserRequestDto);
-    }
-
-    @Delete(":id")
-    async remove(@Param("id") id: number) {
-        return this.userService.remove(id);
+    @Get("profile/@:username")
+    async findOne(@Param("username") username: string) {
+        return this.userService.findOne(username);
     }
 
 }

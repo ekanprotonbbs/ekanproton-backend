@@ -15,13 +15,13 @@ export class UserService {
         const { username: reqUsername, password: reqPassword } =
             createUserRequestDto;
 
-        const { id, username, createdAt, lastlogin, comment } =
+        const { id, username, createdAt, lastLogin, comment } =
             await this.prisma.user.create({
                 data: {
                     username: reqUsername,
                     password: await hash(reqPassword),
-                    lastlogin: new Date(),
-                    lastlogout: new Date(),
+                    lastLogin: new Date(),
+                    lastUpdate: new Date(),
                 },
             });
 
@@ -29,30 +29,34 @@ export class UserService {
             id,
             username,
             createdAt,
-            lastlogin,
+            lastLogin,
             comment,
         };
     }
 
     async findAll(): Promise<UserResponseDto[]> {
-        const resultarray = (await this.prisma.user.findMany({})).map((one) => {
-            const { id, username, createdAt, lastlogin, comment } = one;
+        const resultarray = (await this.prisma.user.findMany({
+            orderBy: {
+                id: "asc"
+            }
+        })).map((one) => {
+            const { id, username, createdAt, lastLogin, comment } = one;
             return {
                 id,
                 username,
                 createdAt,
-                lastlogin,
+                lastLogin,
                 comment,
             };
         });
         return resultarray;
     }
 
-    async findOne(reqId: number): Promise<UserResponseDto> {
-        const { id, username, createdAt, lastlogin, comment } =
+    async findOne(reqUsername: string): Promise<UserResponseDto> {
+        const { id, username, createdAt, lastLogin, comment } =
             await this.prisma.user.findUniqueOrThrow({
                 where: {
-                    id: reqId,
+                    username: reqUsername,
                 },
             });
 
@@ -60,16 +64,9 @@ export class UserService {
             id,
             username,
             createdAt,
-            lastlogin,
+            lastLogin,
             comment,
         };
     }
 
-    async update(id: number, updateUserRequestDto: UpdateUserRequestDto) {
-        return `This action updates a #${id} user`;
-    }
-
-    async remove(id: number) {
-        return `This action removes a #${id} user`;
-    }
 }

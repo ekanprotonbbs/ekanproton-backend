@@ -29,13 +29,6 @@ export class AuthController {
         return this.authservice.login(loginUserRequestDto, request);
     }
 
-    @ApiOkResponse({ type: Boolean })
-    @Get("islogin")
-    @UseGuards(SessionGuard)
-    async islogin() {
-        return this.authservice.islogin();
-    }
-
     @ApiOkResponse({ type: LoginAuthResponseDto })
     @Post("logout")
     @UseGuards(SessionGuard)

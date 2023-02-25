@@ -14,11 +14,14 @@ export class AuthService {
         loginAuthRequestDto: LoginAuthRequestDto,
         request: Request
     ): Promise<LoginAuthResponseDto> {
+        const regeneratePromise = new Promise((resolve) => {
+            request.session.regenerate(resolve);
+        });
+        
         const { username: reqUsername, password: reqPassword } =
             loginAuthRequestDto;
         const {
             id,
-            username,
             password: hashed_password,
         } = await this.prisma.user.findUniqueOrThrow({
             where: {
@@ -30,19 +33,16 @@ export class AuthService {
             throw new PasswordDoesNotMatch();
         }
 
-        const regeneratePromise = new Promise((resolve) => {
-            request.session.regenerate(resolve);
-        });
-
-        await regeneratePromise;
         await this.prisma.user.update({
             where: {
                 id: id,
             },
             data: {
-                lastlogin: new Date(),
+                lastLogin: new Date(),
             },
         });
+
+        await regeneratePromise;
         request.session.userid = id;
 
         return { id };
@@ -53,9 +53,5 @@ export class AuthService {
         request.session.destroy(null);
 
         return { id };
-    }
-
-    islogin() {
-        return true;
     }
 }

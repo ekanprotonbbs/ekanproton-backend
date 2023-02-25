@@ -11,14 +11,14 @@ export class UserAuthResponseDto {
     createdAt: Date;
 
     @ApiProperty()
-    updatedAt: Date;
+    lastLogin: Date;
 
     @ApiProperty()
-    lastlogin: Date;
-
-    @ApiProperty()
-    lastlogout: Date;
+    lastUpdate: Date
 
     @ApiProperty()
     comment: string;
+
+    @ApiProperty()
+    hiddencomment: string;
 }

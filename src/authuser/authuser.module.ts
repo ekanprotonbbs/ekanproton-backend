@@ -9,4 +9,5 @@ import { AuthuserService } from "./authuser.service";
     controllers: [AuthuserController],
     providers: [AuthuserService],
 })
-export class AuthuserModule {}
+export class AuthuserModule {
+}
