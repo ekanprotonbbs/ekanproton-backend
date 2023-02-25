@@ -8,16 +8,13 @@ import {
     Delete,
     Req,
     UseGuards,
+    ParseIntPipe,
 } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserRequestDto } from "./dto/create-user.dto";
 import { UpdateUserRequestDto } from "./dto/update-user.dto";
 import { ApiOkResponse } from "@nestjs/swagger";
 import { UserResponseDto } from "@common/dto/response-user.dto";
-import { LoginUserRequestDto } from "./dto/login-user.dto";
-import { Request } from "express";
-import { AuthGuard } from "@nestjs/passport";
-import { SessionGuard } from "src/auth/auth.guard";
 
 
 @Controller("api/user")
@@ -31,14 +28,13 @@ export class UserController {
     }
 
     @ApiOkResponse({ type: [UserResponseDto] })
-    @UseGuards(SessionGuard)
     @Get("all")
     async findAll() {
         return this.userService.findAll();
     }
 
     @Get(":id")
-    async findOne(@Param("id") id: number) {
+    async findOne(@Param("id", ParseIntPipe) id: number) {
         return this.userService.findOne(id);
     }
 
@@ -54,6 +50,5 @@ export class UserController {
     async remove(@Param("id") id: number) {
         return this.userService.remove(id);
     }
-
 
 }

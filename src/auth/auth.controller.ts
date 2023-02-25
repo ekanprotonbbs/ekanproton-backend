@@ -13,16 +13,17 @@ import { ApiOkResponse } from "@nestjs/swagger";
 import { Request, Response } from "express";
 import { SessionGuard } from "./auth.guard";
 import { AuthService } from "./auth.service";
-import { LoginUserRequestDto } from "./dto/login-user.dto";
+import { LoginAuthRequestDto } from "./dto/login-auth.dto";
+import { LoginAuthResponseDto } from "./dto/response-auth.dto";
 
 @Controller("api/auth")
 export class AuthController {
     constructor(private readonly authservice: AuthService) {}
 
-    @ApiOkResponse({ type: UserResponseDto })
+    @ApiOkResponse({ type: LoginAuthResponseDto })
     @Post("login")
     async login(
-        @Body() loginUserRequestDto: LoginUserRequestDto,
+        @Body() loginUserRequestDto: LoginAuthRequestDto,
         @Req() request: Request
     ) {
         return this.authservice.login(loginUserRequestDto, request);
@@ -35,7 +36,7 @@ export class AuthController {
         return this.authservice.islogin();
     }
 
-    @ApiOkResponse({ type: null })
+    @ApiOkResponse({ type: LoginAuthResponseDto })
     @Post("logout")
     @UseGuards(SessionGuard)
     async logout(@Req() request: Request) {

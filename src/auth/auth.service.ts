@@ -1,28 +1,32 @@
 import { Injectable } from "@nestjs/common";
 import { Request, Response } from "express";
 import { PrismaService } from "src/prisma/prisma.service";
-import { LoginUserRequestDto } from "./dto/login-user.dto";
+import { LoginAuthRequestDto } from "./dto/login-auth.dto";
 import { verify } from "argon2";
 import { PasswordDoesNotMatch } from "@common/exceptions/exceptions";
-import { UserResponseDto } from "@common/dto/response-user.dto";
+import { LoginAuthResponseDto } from "./dto/response-auth.dto";
 
 @Injectable()
 export class AuthService {
     constructor(private prisma: PrismaService) {}
 
     async login(
-        loginUserRequestDto: LoginUserRequestDto,
+        loginAuthRequestDto: LoginAuthRequestDto,
         request: Request
-    ): Promise<UserResponseDto> {
-        const { username, password } = loginUserRequestDto;
-        const { password: hashed_password, ...result } =
-            await this.prisma.user.findUniqueOrThrow({
-                where: {
-                    username: username,
-                },
-            });
+    ): Promise<LoginAuthResponseDto> {
+        const { username: reqUsername, password: reqPassword } =
+            loginAuthRequestDto;
+        const {
+            id,
+            username,
+            password: hashed_password,
+        } = await this.prisma.user.findUniqueOrThrow({
+            where: {
+                username: reqUsername,
+            },
+        });
 
-        if (!(await verify(hashed_password, password))) {
+        if (!(await verify(hashed_password, reqPassword))) {
             throw new PasswordDoesNotMatch();
         }
 
@@ -31,16 +35,24 @@ export class AuthService {
         });
 
         await regeneratePromise;
-        request.session.userid = result.id;
+        await this.prisma.user.update({
+            where: {
+                id: id,
+            },
+            data: {
+                lastlogin: new Date(),
+            },
+        });
+        request.session.userid = id;
 
-        return result;
+        return { id };
     }
 
-    async logout(request: Request) {
-        request.session.cookie.maxAge = -1;
+    async logout(request: Request): Promise<LoginAuthResponseDto> {
+        const id = request.session.userid;
         request.session.destroy(null);
 
-        return { statusCode: "200", message: "Logged out successfully." };
+        return { id };
     }
 
     islogin() {
