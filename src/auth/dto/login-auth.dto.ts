@@ -8,7 +8,7 @@ import {
     IsStrongPassword,
 } from "class-validator";
 
-export class LoginUserRequestDto {
+export class LoginAuthRequestDto {
     @IsNotEmpty()
     @IsString()
     @ApiProperty({ required: true })

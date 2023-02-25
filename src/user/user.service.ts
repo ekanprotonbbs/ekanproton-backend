@@ -5,7 +5,6 @@ import { CreateUserRequestDto } from "./dto/create-user.dto";
 import { UpdateUserRequestDto } from "./dto/update-user.dto";
 import { hash, verify } from "argon2";
 import { UserResponseDto } from "@common/dto/response-user.dto";
-import { LoginUserRequestDto } from "./dto/login-user.dto";
 
 @Injectable()
 export class UserService {
@@ -14,36 +13,85 @@ export class UserService {
     async create(
         createUserRequestDto: CreateUserRequestDto
     ): Promise<UserResponseDto> {
-        const { username, password } = createUserRequestDto;
+        const { username: reqUsername, password: reqPassword } =
+            createUserRequestDto;
 
-        const { password: _, ...result } = await this.prisma.user.create({
+        const {
+            id,
+            username,
+            createdAt,
+            updatedAt,
+            lastlogin,
+            lastlogout,
+            comment,
+        } = await this.prisma.user.create({
             data: {
-                username: username,
-                password: await hash(password),
+                username: reqUsername,
+                password: await hash(reqPassword),
+                lastlogin: new Date(),
+                lastlogout: new Date(),
             },
         });
 
-        return result;
+        return {
+            id,
+            username,
+            createdAt,
+            updatedAt,
+            lastlogin,
+            lastlogout,
+            comment,
+        };
     }
 
-    
     async findAll(): Promise<UserResponseDto[]> {
         const resultarray = (await this.prisma.user.findMany({})).map((one) => {
-            const { password: _, ...result } = one;
-            return result;
+            const {
+                id,
+                username,
+                createdAt,
+                updatedAt,
+                lastlogin,
+                lastlogout,
+                comment,
+            } = one;
+            return {
+                id,
+                username,
+                createdAt,
+                updatedAt,
+                lastlogin,
+                lastlogout,
+                comment,
+            };
         });
         return resultarray;
     }
 
-    async findOne(id: number): Promise<UserResponseDto> {
-        const { password: _, ...result } =
-            await this.prisma.user.findUniqueOrThrow({
-                where: {
-                    id: id,
-                },
-            });
+    async findOne(reqId: number): Promise<UserResponseDto> {
+        const {
+            id,
+            username,
+            createdAt,
+            updatedAt,
+            lastlogin,
+            lastlogout,
+            comment,
+        } = await this.prisma.user.findUniqueOrThrow({
+            where: {
+                id: reqId,
+            },
+        });
 
-        return result;
+        return {
+            id,
+            username,
+            createdAt,
+            updatedAt,
+            lastlogin,
+            lastlogout,
+            comment,
+        };
     }
 
     async update(id: number, updateUserRequestDto: UpdateUserRequestDto) {

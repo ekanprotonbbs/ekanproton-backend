@@ -12,4 +12,13 @@ export class UserResponseDto {
 
     @ApiProperty()
     updatedAt: Date;
+
+    @ApiProperty()
+    lastlogin: Date;
+
+    @ApiProperty()
+    lastlogout: Date;
+
+    @ApiProperty()
+    comment: string;
 }
