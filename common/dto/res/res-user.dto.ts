@@ -11,13 +11,7 @@ export class UserResponseDto {
     createdAt: Date;
 
     @ApiProperty()
-    updatedAt: Date;
-
-    @ApiProperty()
     lastlogin: Date;
-
-    @ApiProperty()
-    lastlogout: Date;
 
     @ApiProperty()
     comment: string;

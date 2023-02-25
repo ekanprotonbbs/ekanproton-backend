@@ -11,10 +11,10 @@ import {
     ParseIntPipe,
 } from "@nestjs/common";
 import { UserService } from "./user.service";
-import { CreateUserRequestDto } from "./dto/create-user.dto";
-import { UpdateUserRequestDto } from "./dto/update-user.dto";
+import { CreateUserRequestDto } from "@common/dto/req/create-user.dto";
+import { UpdateUserRequestDto } from "@common/dto/req/update-user.dto";
 import { ApiOkResponse } from "@nestjs/swagger";
-import { UserResponseDto } from "@common/dto/response-user.dto";
+import { UserResponseDto } from "@common/dto/res/res-user.dto";
 
 
 @Controller("api/user")
