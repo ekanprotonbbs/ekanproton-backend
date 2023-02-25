@@ -11,15 +11,17 @@ datasource db {
 }
 
 model User {
-  id         Int      @id @default(autoincrement())
-  username   String   @unique
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  lastlogin  DateTime
-  lastlogout DateTime
-  password   String
-  comment    String?
-  posts      Post[]
+  id            Int      @id @default(autoincrement())
+  username      String   @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  lastLogin     DateTime
+  lastUpdate    DateTime
+  password      String
+  comment       String?
+  hiddencomment String?
+
+  posts Post[]
 }
 
 model Post {

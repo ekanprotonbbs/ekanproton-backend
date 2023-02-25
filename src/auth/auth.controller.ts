@@ -1,4 +1,4 @@
-import { UserResponseDto } from "@common/dto/response-user.dto";
+import { UserResponseDto } from "@common/dto/res/res-user.dto";
 import {
     Controller,
     Get,
@@ -27,13 +27,6 @@ export class AuthController {
         @Req() request: Request
     ) {
         return this.authservice.login(loginUserRequestDto, request);
-    }
-
-    @ApiOkResponse({ type: Boolean })
-    @Get("islogin")
-    @UseGuards(SessionGuard)
-    async islogin() {
-        return this.authservice.islogin();
     }
 
     @ApiOkResponse({ type: LoginAuthResponseDto })

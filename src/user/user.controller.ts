@@ -11,10 +11,10 @@ import {
     ParseIntPipe,
 } from "@nestjs/common";
 import { UserService } from "./user.service";
-import { CreateUserRequestDto } from "./dto/create-user.dto";
-import { UpdateUserRequestDto } from "./dto/update-user.dto";
+import { CreateUserRequestDto } from "@common/dto/req/create-user.dto";
+import { UpdateUserRequestDto } from "@common/dto/req/update-user.dto";
 import { ApiOkResponse } from "@nestjs/swagger";
-import { UserResponseDto } from "@common/dto/response-user.dto";
+import { UserResponseDto } from "@common/dto/res/res-user.dto";
 
 
 @Controller("api/user")
@@ -28,27 +28,14 @@ export class UserController {
     }
 
     @ApiOkResponse({ type: [UserResponseDto] })
-    @Get("all")
+    @Get("profile/all")
     async findAll() {
         return this.userService.findAll();
     }
 
-    @Get(":id")
-    async findOne(@Param("id", ParseIntPipe) id: number) {
-        return this.userService.findOne(id);
-    }
-
-    @Patch(":id")
-    async update(
-        @Param("id") id: number,
-        @Body() updateUserRequestDto: UpdateUserRequestDto
-    ) {
-        return this.userService.update(id, updateUserRequestDto);
-    }
-
-    @Delete(":id")
-    async remove(@Param("id") id: number) {
-        return this.userService.remove(id);
+    @Get("profile/@:username")
+    async findOne(@Param("username") username: string) {
+        return this.userService.findOne(username);
     }
 
 }
