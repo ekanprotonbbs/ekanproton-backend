@@ -1,12 +1,14 @@
 import { Controller, Req, UseGuards, Get, Put, Delete, Body } from "@nestjs/common";
 import { Request } from "express";
-import { SessionGuard } from "src/auth/auth.guard";
+import { SessionGuard } from "src/auth/guard/session-auth.guard";
 import { AuthuserService } from "./authuser.service";
 import { UpdateUserRequestDto, } from "@common/dto/req/update-user.dto";
 import { DeleteUserRequestDto } from "@common/dto/req/delete-user.dto";
 import { ApiOkResponse } from "@nestjs/swagger";
 import { UserAuthResponseDto } from "@common/dto/res/resauth-user.dto";
 import { PasswordUserAuthRequestDto } from "./dto/password-dto";
+import { RoleGuard } from "src/auth/guard/role-auth.guard";
+import { SetRole } from "src/auth/guard/role-auth.decorator";
 
 @Controller("api/user")
 @UseGuards(SessionGuard)
@@ -35,5 +37,13 @@ export class AuthuserController {
     @Delete("profile/me")
     async delete(@Req() request: Request, @Body() deleteUserRequestDto:DeleteUserRequestDto) {
         return this.authuserService.delete(request,deleteUserRequestDto)
+    }
+
+    @ApiOkResponse({type: Boolean})
+    @Get("profile/hoge")
+    @SetRole("ADMIN", "SUBADMIN")
+    @UseGuards(RoleGuard)
+    async hoge() {
+        return true
     }
 }

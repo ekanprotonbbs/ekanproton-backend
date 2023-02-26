@@ -1,6 +1,6 @@
 declare const module: any;
 
-import { NestFactory } from "@nestjs/core";
+import { HttpAdapterHost, NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { ValidationPipe } from "@nestjs/common";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
@@ -8,9 +8,15 @@ import * as session from "express-session";
 import * as connectRedis from "connect-redis";
 import Redis from "ioredis";
 import * as passport from "passport";
+import { PrismaErrorFilter } from "@common/exceptions/nouser/prisma.filter";
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
+    
+    //app.useGlobalFilters(new NotFoundErrorFilter())
+
+    const {httpAdapter} = app.get(HttpAdapterHost)
+    app.useGlobalFilters(new PrismaErrorFilter(httpAdapter))
 
     app.useGlobalPipes(
         new ValidationPipe({
@@ -53,6 +59,7 @@ async function bootstrap() {
     );
     app.use(passport.initialize())
     app.use(passport.session())
+
 
     await app.listen(3001);
 

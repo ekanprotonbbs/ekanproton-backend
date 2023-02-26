@@ -4,8 +4,8 @@ import {
     UnauthorizedException,
 } from '@nestjs/common';
 
-export class TodoNotFoundException extends NotFoundException {
-    constructor(message: string = 'The specified Todo item does not exist.') {
+export class UserNotFoundException extends NotFoundException {
+    constructor(message: string = 'The specified user does not exist.') {
         super(message);
     }
 }
@@ -16,8 +16,8 @@ export class PasswordDoesNotMatch extends UnauthorizedException {
     }
 }
 
-export class TodoAlreadyExistException extends NotAcceptableException {
-    constructor(message: string = 'The Todo item already exists.') {
+export class UserAlreadyExistException extends NotAcceptableException {
+    constructor(message: string = 'This username already exists.') {
         super(message);
     }
 }

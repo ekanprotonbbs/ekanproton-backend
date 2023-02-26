@@ -8,10 +8,9 @@ import {
     UseGuards,
     Res,
 } from "@nestjs/common";
-import { AuthGuard } from "@nestjs/passport";
 import { ApiOkResponse } from "@nestjs/swagger";
 import { Request, Response } from "express";
-import { SessionGuard } from "./auth.guard";
+import { SessionGuard } from "./guard/session-auth.guard";
 import { AuthService } from "./auth.service";
 import { LoginAuthRequestDto } from "./dto/login-auth.dto";
 import { LoginAuthResponseDto } from "./dto/response-auth.dto";
@@ -32,7 +31,7 @@ export class AuthController {
     @ApiOkResponse({ type: LoginAuthResponseDto })
     @Post("logout")
     @UseGuards(SessionGuard)
-    async logout(@Req() request: Request) {
-        return this.authservice.logout(request);
+    async logout(@Req() request: Request, @Res({passthrough: true}) response: Response) {
+        return this.authservice.logout(request, response);
     }
 }
