@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { Role } from "@prisma/client";
 
 export class UserAuthResponseDto {
     @ApiProperty()
@@ -21,4 +22,7 @@ export class UserAuthResponseDto {
 
     @ApiProperty()
     hiddencomment: string;
+
+    @ApiProperty()
+    role: Role
 }

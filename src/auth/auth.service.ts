@@ -5,6 +5,7 @@ import { LoginAuthRequestDto } from "./dto/login-auth.dto";
 import { verify } from "argon2";
 import { PasswordDoesNotMatch } from "@common/exceptions/exceptions";
 import { LoginAuthResponseDto } from "./dto/response-auth.dto";
+import { Role } from "@prisma/client";
 
 @Injectable()
 export class AuthService {
@@ -17,17 +18,15 @@ export class AuthService {
         const regeneratePromise = new Promise((resolve) => {
             request.session.regenerate(resolve);
         });
-        
+
         const { username: reqUsername, password: reqPassword } =
             loginAuthRequestDto;
-        const {
-            id,
-            password: hashed_password,
-        } = await this.prisma.user.findUniqueOrThrow({
-            where: {
-                username: reqUsername,
-            },
-        });
+        const { id, password: hashed_password } =
+            await this.prisma.user.findUniqueOrThrow({
+                where: {
+                    username: reqUsername,
+                },
+            });
 
         if (!(await verify(hashed_password, reqPassword))) {
             throw new PasswordDoesNotMatch();
@@ -53,5 +52,20 @@ export class AuthService {
         request.session.destroy(null);
 
         return { id };
+    }
+
+    async getRole(myId: number, setRoles: Role[]): Promise<boolean> {
+
+        const { role: myRole } = await this.prisma.user.findUniqueOrThrow({
+            where: {
+                id: myId,
+            },
+        });
+
+        if (setRoles.includes(myRole)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

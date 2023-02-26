@@ -22,6 +22,7 @@ export class AuthuserService {
             lastUpdate,
             comment,
             hiddencomment,
+            role
         } = await this.prisma.user.findUniqueOrThrow({
             where: {
                 id: nowId,
@@ -36,6 +37,7 @@ export class AuthuserService {
             lastUpdate,
             comment,
             hiddencomment,
+            role
         };
     }
 
@@ -59,6 +61,7 @@ export class AuthuserService {
             lastLogin,
             lastUpdate,
             hiddencomment,
+            role
         } = await this.prisma.user.update({
             where: {
                 id: nowId,
@@ -79,6 +82,7 @@ export class AuthuserService {
             lastLogin,
             lastUpdate,
             hiddencomment,
+            role
         };
     }
 
@@ -110,6 +114,7 @@ export class AuthuserService {
             lastLogin,
             lastUpdate,
             hiddencomment,
+            role
         } = await this.prisma.user.update({
             where: {
                 id: myId,
@@ -127,6 +132,7 @@ export class AuthuserService {
             lastLogin,
             lastUpdate,
             hiddencomment,
+            role
         };
     }
 
@@ -156,6 +162,7 @@ export class AuthuserService {
             lastLogin,
             lastUpdate,
             hiddencomment,
+            role
         } = await this.prisma.user.delete({
             where: {
                 id: myId,
@@ -170,6 +177,7 @@ export class AuthuserService {
             lastLogin,
             lastUpdate,
             hiddencomment,
+            role
         };
     }
 }

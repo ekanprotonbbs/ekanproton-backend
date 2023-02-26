@@ -8,10 +8,9 @@ import {
     UseGuards,
     Res,
 } from "@nestjs/common";
-import { AuthGuard } from "@nestjs/passport";
 import { ApiOkResponse } from "@nestjs/swagger";
 import { Request, Response } from "express";
-import { SessionGuard } from "./auth.guard";
+import { SessionGuard } from "./guard/session-auth.guard";
 import { AuthService } from "./auth.service";
 import { LoginAuthRequestDto } from "./dto/login-auth.dto";
 import { LoginAuthResponseDto } from "./dto/response-auth.dto";

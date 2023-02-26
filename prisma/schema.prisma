@@ -20,6 +20,7 @@ model User {
   password      String
   comment       String?
   hiddencomment String?
+  role          Role     @default(User)
 
   posts Post[]
 }
@@ -35,4 +36,11 @@ model Post {
   title   String
   details String?
   isDone  Boolean
+}
+
+enum Role {
+  User
+  MANAGER
+  SUBADMIN
+  ADMIN
 }
