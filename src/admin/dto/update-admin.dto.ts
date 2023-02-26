@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Role } from "@prisma/client";
-import { IsEnum, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
+import { IsEnum, IsOptional, IsString, MaxLength, MinLength, IsStrongPassword } from "class-validator";
 
 export class UpdateUserAdminRequestDto {
 
@@ -10,6 +10,12 @@ export class UpdateUserAdminRequestDto {
     @MaxLength(20)
     @ApiProperty({ required: false })
     username?: string;
+
+    @IsOptional()
+    @IsString()
+    @IsStrongPassword()
+    @ApiProperty({ required: true })
+    password: string;
 
     @IsOptional()
     @IsString()
