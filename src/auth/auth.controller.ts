@@ -31,7 +31,7 @@ export class AuthController {
     @ApiOkResponse({ type: LoginAuthResponseDto })
     @Post("logout")
     @UseGuards(SessionGuard)
-    async logout(@Req() request: Request) {
-        return this.authservice.logout(request);
+    async logout(@Req() request: Request, @Res({passthrough: true}) response: Response) {
+        return this.authservice.logout(request, response);
     }
 }

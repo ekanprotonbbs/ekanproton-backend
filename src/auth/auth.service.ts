@@ -47,9 +47,10 @@ export class AuthService {
         return { id };
     }
 
-    async logout(request: Request): Promise<LoginAuthResponseDto> {
+    async logout(request: Request, response: Response): Promise<LoginAuthResponseDto> {
         const id = request.session.userid;
         request.session.destroy(null);
+        response.clearCookie("SESSIONID")
 
         return { id };
     }

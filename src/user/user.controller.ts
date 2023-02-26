@@ -3,16 +3,11 @@ import {
     Get,
     Post,
     Body,
-    Patch,
     Param,
-    Delete,
-    Req,
-    UseGuards,
-    ParseIntPipe,
+    UseFilters,
 } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserRequestDto } from "@common/dto/req/create-user.dto";
-import { UpdateUserRequestDto } from "@common/dto/req/update-user.dto";
 import { ApiOkResponse } from "@nestjs/swagger";
 import { UserResponseDto } from "@common/dto/res/res-user.dto";
 
